@@ -108,11 +108,41 @@ node_templates:
       - type: cloudify.openstack.server_connected_to_security_group
         target: sg_influxdb
     interfaces:
-        cloudify.interfaces.monitoring_agent:
-            create:
-                implementation: telegraf.telegraf_plugin.tasks.create
-            configure:
-                implementation: telegraf.telegraf_plugin.tasks.configure
+      cloudify.interfaces.monitoring_agent:
+        install:
+            implementation: telegraf.telegraf_plugin.tasks.install
+            inputs:
+              telegraf_install_path: /opt/telegraf
+              download_url:
+              telegraf_config_file:
+              telegraf_config_inputs:
+                outputs:
+                  influxdb:
+                    urls:
+                      - http://localhost:8086
+                    database: monitoring_telegraf
+                    precision: s
+                  datadog:
+                    apikey: 1
+                inputs:
+                  kernel:
+                  mem:
+                  system:
+                  processes:
+                  swap:
+                  cpu:
+                    percpu: false
+                    totalcpu: true
+                    fielddrop:
+                      - time_*
+                  disk:
+                    ignore_fs:
+                      - tmpfs
+                      - devtmpfs
+        start:
+            implementation: telegraf.telegraf_plugin.tasks.start
+
+
 
   influxdb:
     type: my_types.nodes.InfluxdbNode
