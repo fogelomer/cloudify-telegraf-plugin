@@ -52,8 +52,8 @@ class TesttelegrafPlugin(unittest.TestCase):
             except:
                 subprocess.call(['sudo', 'rm', '-rf', TEMP_TELEGRAF])
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     def test_download_telegraf(self):
         '''test download_telegraf function'''
@@ -66,8 +66,8 @@ class TesttelegrafPlugin(unittest.TestCase):
             self.assertEqual(filename, 'telegraf-0.12.0-1.x86_64.rpm')
         self.assertTrue(os.path.exists(os.path.join(TEMP_TELEGRAF, filename)))
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     def test_download_telegraf_path_not_exists(self):
         '''test download - verify nothing downloaded'''
@@ -79,8 +79,8 @@ class TesttelegrafPlugin(unittest.TestCase):
             self.assertEqual(filename, 'telegraf-0.12.0-1.x86_64.rpm')
         self.assertTrue(os.path.exists(os.path.join(TEMP_TELEGRAF, filename)))
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     def test_download_file(self):
         '''test download -  verify file exists after download'''
@@ -93,8 +93,8 @@ class TesttelegrafPlugin(unittest.TestCase):
         self.assertEqual(filename, 'telegraf_0.12.0-1_amd64.deb')
         self.assertTrue(os.path.exists(filename))
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     def test_download_file_failed(self):
         '''test download - verify nothing downloaded'''
