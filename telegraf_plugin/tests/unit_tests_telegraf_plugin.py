@@ -91,7 +91,7 @@ class TesttelegrafPlugin(unittest.TestCase):
             'telegraf_0.12.0-1_amd64.deb',
             TEMP_TELEGRAF)
         self.assertEqual(filename, 'telegraf_0.12.0-1_amd64.deb')
-        self.assertTrue(os.path.exists(filename))
+        self.assertTrue(os.path.exists(os.path.join(TEMP_TELEGRAF, filename)))
 
     @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
     @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
