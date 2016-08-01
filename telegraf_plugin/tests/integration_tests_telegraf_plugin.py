@@ -79,8 +79,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                        'io': None,
                        'cpu': {'percpu': False,
                                'totalcpu': True,
-                               'drop': ['cpu_time', 'x']},
-                       'disk': {'int': 1000, 'string': 'abc'}
+                               'drop': ['cpu_time']},
                        },
             'outputs': {'influxdb':
                         {'urls': ['http://localhost:8086',
@@ -154,8 +153,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                        'io': None,
                        'cpu': {'percpu': False,
                                'totalcpu': True,
-                               'drop': ['cpu_time', 'x']},
-                       'disk': {'int': 1000, 'string': 'abc'}
+                               'drop': ['cpu_time']},
                        },
             'outputs': {'influxdb':
                         {'urls': ['http://localhost:8086',
