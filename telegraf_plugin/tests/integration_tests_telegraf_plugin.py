@@ -84,7 +84,8 @@ class TesttelegrafPlugin(unittest.TestCase):
                        'disk': 10000
                        },
             'outputs': {'influxdb':
-                        {'urls': ['http://localhost:8086', 'http://10.0.0.0:8086'],
+                        {'urls': ['http://localhost:8086',
+                                  'http://10.0.0.0:8086'],
                          'database': 'monitoring_telegraf',
                          'int': 25},
                         'kafka':
@@ -163,9 +164,10 @@ class TesttelegrafPlugin(unittest.TestCase):
                        'disk': 10000
                        },
             'outputs': {'influxdb':
-                            {'urls': ['http://localhost:8086', 'http://10.0.0.0:8086'],
-                             'database': 'monitoring_telegraf',
-                             'int': 25},
+                        {'urls': ['http://localhost:8086',
+                                  'http://10.0.0.0:8086'],
+                         'database': 'monitoring_telegraf',
+                         'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
                              'topic': 'es'},

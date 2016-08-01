@@ -35,6 +35,7 @@ TELEGRAF_CONFIG_FILE_DEFAULT = os.path.join(
     '/', 'etc', 'telegraf', 'telegraf.conf')
 TELEGRAF_PATH_DEFAULT = os.path.join('/', 'opt', 'telegraf')
 
+
 @operation
 def install(telegraf_config_inputs, telegraf_config_file='',
             telegraf_install_path='', download_url='', **kwargs):
@@ -100,9 +101,11 @@ def download_telegraf(telegraf_install_path, download_url='', **kwargs):
 
     if not download_url:
         if dist in ('ubuntu', 'debian'):
-            download_url = 'http://get.influxdb.org/telegraf/telegraf_0.12.0-1_amd64.deb'
+            download_url = 'http://get.influxdb.org/telegraf/' + \
+                           'telegraf_0.12.0-1_amd64.deb'
         elif dist in ('centos', 'redhat'):
-            download_url = 'http://get.influxdb.org/telegraf/telegraf-0.12.0-1.x86_64.rpm'
+            download_url = 'http://get.influxdb.org/telegraf/' + \
+                           'telegraf-0.12.0-1.x86_64.rpm'
         else:
             raise exceptions.NonRecoverableError(
                 '''Error! distribution is not supported.
@@ -159,7 +162,8 @@ def configure(telgraf_config, telegraf_config_file='', **kwargs):
             raise ValueError(
                 "wrong inputs provided! can't redner configuration file")
 
-    _run('sudo mv {0} {1}'.format(telegraf_config_file, TELEGRAF_CONFIG_FILE_DEFAULT))
+    _run('sudo mv {0} {1}'.format(telegraf_config_file,
+                                  TELEGRAF_CONFIG_FILE_DEFAULT))
     ctx.logger.info('telegraf.conf was configured...')
 
 
@@ -172,7 +176,8 @@ def _download_file(url, destination):
         for chunk in response.iter_content(chunk_size=512):
             if chunk:
                 temp_file.write(chunk)
-    _run('sudo mv {0} {1}'.format(local_filename, os.path.join(destination, filename)))
+    _run('sudo mv {0} {1}'.format(local_filename, os.path.join(destination,
+                                                               filename)))
     return filename
 
 
