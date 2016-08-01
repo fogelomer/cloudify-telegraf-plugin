@@ -78,8 +78,8 @@ class TesttelegrafPlugin(unittest.TestCase):
         dict1_valid = {
             'inputs': {'mem': None,
                        'io': None,
-                       'cpu': {'percpu': False,
-                               'totalcpu': True,
+                       'cpu': {'percpu': 'false',
+                               'totalcpu': 'true',
                                'drop': ['cpu_time', 'x']},
                        'disk': 10000
                        },
