@@ -31,7 +31,7 @@ from .. import tasks
 distro = distro.id()
 PATH = os.path.dirname(__file__)
 TEMP_TELEGRAF = os.path.join(tempfile.gettempdir(), 'telegraf')
-CONFIG_FILE = os.path.join(TEMP_TELEGRAF, 'telegraf.yml')
+CONFIG_FILE = os.path.join(TEMP_TELEGRAF, 'telegraf.conf')
 
 
 def mock_install_ctx():
