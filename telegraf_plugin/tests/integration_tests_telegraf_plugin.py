@@ -48,23 +48,23 @@ class TesttelegrafPlugin(unittest.TestCase):
         # remove telegraf temp dir
         if os.path.exists(TEMP_TELEGRAF):
             shutil.rmtree(TEMP_TELEGRAF)
-    #
-    # @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    # @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
-    # @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
-    # def test_install_service(self):
-    #     '''verify service is available after installation -
-    #      installation file is provided'''
-    #     os.mkdir(TEMP_TELEGRAF)
-    #
-    #     if distro in ('ubuntu', 'debian'):
-    #         tasks.install_telegraf('telegraf_0.12.0-1_amd64.deb', PATH)
-    #         output = subprocess.check_output(['dpkg', '-l', 'telegraf'])
-    #         self.assertIn('telegraf', output)
-    #     elif distro in ('centos', 'redhat'):
-    #         tasks.install_telegraf('telegraf-0.12.0-1.x86_64.rpm', PATH)
-    #         output = subprocess.check_output(['rpm', '-qa'])
-    #         self.assertIn('telegraf', output)
+
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
+    def test_install_service(self):
+        '''verify service is available after installation -
+         installation file is provided'''
+        os.mkdir(TEMP_TELEGRAF)
+
+        if distro in ('ubuntu', 'debian'):
+            tasks.install_telegraf('telegraf_0.12.0-1_amd64.deb', PATH)
+            output = subprocess.check_output(['dpkg', '-l', 'telegraf'])
+            self.assertIn('telegraf', output)
+        elif distro in ('centos', 'redhat'):
+            tasks.install_telegraf('telegraf-0.12.0-1.x86_64.rpm', PATH)
+            output = subprocess.check_output(['rpm', '-qa'])
+            self.assertIn('telegraf', output)
 
     @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
     @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
