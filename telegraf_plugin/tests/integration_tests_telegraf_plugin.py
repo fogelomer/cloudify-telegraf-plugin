@@ -77,18 +77,16 @@ class TesttelegrafPlugin(unittest.TestCase):
         dict1_valid = {
             'inputs': {'mem': None,
                        'io': None,
+                       'disk': None,
+                       'system': None,
+                       'swap': None,
                        'cpu': {'percpu': False,
                                'totalcpu': True,
                                'drop': ['cpu_time']},
                        },
             'outputs': {'influxdb':
-                        {'urls': ['http://localhost:8086',
-                                  'http://10.0.0.0:8086'],
-                         'database': 'monitoring_telegraf',
-                         'int': 25},
-                        'kafka':
-                            {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                             'topic': 'es'}
+                        {'urls': ['http://localhost:8086',],
+                         'database': 'monitoring_telegraf'},
                         }
             }
 
@@ -151,18 +149,17 @@ class TesttelegrafPlugin(unittest.TestCase):
         dict1_valid = {
             'inputs': {'mem': None,
                        'io': None,
+                       'disk': None,
+                       'system': None,
+                       'swap': None,
                        'cpu': {'percpu': False,
                                'totalcpu': True,
                                'drop': ['cpu_time']},
                        },
             'outputs': {'influxdb':
-                        {'urls': ['http://localhost:8086',
-                                  'http://10.0.0.0:8086'],
-                         'database': 'monitoring_telegraf',
-                         'int': 25},
-                        'kafka':
-                        {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                         'topic': 'es'}}
+                            {'urls': ['http://localhost:8086',],
+                             'database': 'monitoring_telegraf'},
+                        }
         }
 
         tasks.configure(os.path.join('telegraf_plugin',
