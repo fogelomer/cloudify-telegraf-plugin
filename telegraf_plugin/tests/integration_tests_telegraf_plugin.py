@@ -59,11 +59,11 @@ class TesttelegrafPlugin(unittest.TestCase):
         os.mkdir(TEMP_TELEGRAF)
 
         if distro in ('ubuntu', 'debian'):
-            tasks.install_telegraf('telegraf_1.2.3_amd64.deb', PATH)
+            tasks.install_telegraf('telegraf_0.12.0-1_amd64.deb', PATH)
             output = subprocess.check_output(['dpkg', '-l', 'telegraf'])
             self.assertIn('telegraf', output)
         elif distro in ('centos', 'redhat'):
-            tasks.install_telegraf('telegraf-1.2.3-x86_64.rpm', PATH)
+            tasks.install_telegraf('telegraf-0.12.0-1.x86_64.rpm', PATH)
             output = subprocess.check_output(['rpm', '-qa'])
             self.assertIn('telegraf', output)
 

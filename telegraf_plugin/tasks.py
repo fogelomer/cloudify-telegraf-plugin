@@ -167,7 +167,10 @@ def configure(telegraf_config_file='', telgraf_config='', **kwargs):
 
 
 def _download_file(url, destination):
-    filename = url.split('/')[-1]
+    try:
+        filename = url.split('/')[-1]
+    except:
+        raise ValueError("wrong url provided! can't _download_file")
     temp_dir = '/tmp'
     local_filename = os.path.join(temp_dir, filename)
     response = requests.get(url, stream=True)
