@@ -11,7 +11,7 @@ dependencies:
   pre:
     - pyenv local 2.7.9
     - curl -L -O http://get.influxdb.org/telegraf/telegraf_0.12.0-1_amd64.deb
-    - sudo dpkg -i filebeat_1.2.3_amd64.deb
+    - sudo dpkg -i telegraf_0.12.0-1_amd64.deb
   override:
     - pip install tox
 
