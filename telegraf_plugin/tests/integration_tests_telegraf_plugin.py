@@ -95,16 +95,11 @@ class TesttelegrafPlugin(unittest.TestCase):
 
         tasks.configure('', dict1_valid)
         self.assertTrue(os.path.exists(CONFIG_FILE))
-        with open(CONFIG_FILE) as stream:
-            try:
-                yaml.load(stream)
-            except yaml.YAMLError, exc:
-                raise AssertionError(exc)
         output = subprocess.check_output(['telegraf',
-                                          '-c',
+                                          '-config',
                                           CONFIG_FILE,
-                                          '-configtest'])
-        self.assertNotIn('error', output)
+                                          '-test'])
+        self.assertNotIn('Error', output)
 
     @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
     @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
@@ -176,11 +171,12 @@ class TesttelegrafPlugin(unittest.TestCase):
                                      'tests',
                                      'example_with_inputs.conf'), dict1_valid)
         self.assertTrue(os.path.exists(CONFIG_FILE))
-        with open(CONFIG_FILE) as stream:
-            try:
-                yaml.load(stream)
-            except yaml.YAMLError, exc:
-                raise AssertionError(exc)
+
+        output = subprocess.check_output(['telegraf',
+                                          '-config',
+                                          CONFIG_FILE,
+                                          '-test'])
+        self.assertNotIn('Error', output)
 
     @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
     @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
@@ -198,8 +194,9 @@ class TesttelegrafPlugin(unittest.TestCase):
         tasks.configure(os.path.join(
             'telegraf_plugin', 'tests', 'example.conf'), None)
         self.assertTrue(os.path.exists(CONFIG_FILE))
-        with open(CONFIG_FILE) as stream:
-            try:
-                yaml.load(stream)
-            except yaml.YAMLError, exc:
-                raise AssertionError(exc)
+
+        output = subprocess.check_output(['telegraf',
+                                          '-config',
+                                          CONFIG_FILE,
+                                          '-test'])
+        self.assertNotIn('Error', output)
