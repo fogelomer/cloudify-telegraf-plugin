@@ -50,8 +50,8 @@ class TesttelegrafPlugin(unittest.TestCase):
         if os.path.exists(TEMP_TELEGRAF):
             shutil.rmtree(TEMP_TELEGRAF)
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     def test_install_service(self):
         '''verify service is available after installation -
@@ -67,8 +67,8 @@ class TesttelegrafPlugin(unittest.TestCase):
             output = subprocess.check_output(['rpm', '-qa'])
             self.assertIn('telegraf', output)
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     def test_configure_with_inputs_no_file(self, *args):
         '''validate configuration without file -
@@ -91,7 +91,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
                              'topic': 'es'},
-                        'int': 10},
+                        'int': 10}
         }
 
         tasks.configure('', dict1_valid)
@@ -107,8 +107,8 @@ class TesttelegrafPlugin(unittest.TestCase):
                                           '-configtest'])
         self.assertNotIn('error', output)
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     def test_failed_configure(self, *args):
 
@@ -142,14 +142,14 @@ class TesttelegrafPlugin(unittest.TestCase):
         }
         self.assertRaises(ValueError, tasks.configure, '', dict4_unvalid)
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     @patch('cloudify.utils.get_manager_file_server_blueprints_root_url',
            return_value='')
     @patch('cloudify.manager.get_resource_from_manager',
            return_value=mock_get_resource_from_manager(os.path.join(
-               'telegraf_plugin', 'tests', 'example_with_inputs.yml')))
+               'telegraf_plugin', 'tests', 'example_with_inputs.conf')))
     def test_configure_with_inputs_and_file(self, *args):
         '''validate configuration with inputs and file
          rendered correctly and placed on the right place'''
@@ -164,14 +164,14 @@ class TesttelegrafPlugin(unittest.TestCase):
                        'disk': 10000
                        },
             'outputs': {'influxdb':
-                        {'urls': ['http://localhost:8086',
-                                  'http://10.0.0.0:8086'],
-                         'database': 'monitoring_telegraf',
-                         'int': 25},
+                            {'urls': ['http://localhost:8086',
+                                      'http://10.0.0.0:8086'],
+                             'database': 'monitoring_telegraf',
+                             'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
                              'topic': 'es'},
-                        'int': 10},
+                        'int': 10}
         }
 
         tasks.configure(os.path.join('telegraf_plugin',
@@ -184,8 +184,8 @@ class TesttelegrafPlugin(unittest.TestCase):
             except yaml.YAMLError, exc:
                 raise AssertionError(exc)
 
-    @patch('telegraf_plugin.tasks.telegraf_CONFIG_FILE_DEFAULT', CONFIG_FILE)
-    @patch('telegraf_plugin.tasks.telegraf_PATH_DEFAULT', TEMP_TELEGRAF)
+    @patch('telegraf_plugin.tasks.TELEGRAF_CONFIG_FILE_DEFAULT', CONFIG_FILE)
+    @patch('telegraf_plugin.tasks.TELEGRAF_PATH_DEFAULT', TEMP_TELEGRAF)
     @patch('telegraf_plugin.tasks.ctx', mock_install_ctx())
     @patch('cloudify.utils.get_manager_file_server_blueprints_root_url',
            return_value='')
