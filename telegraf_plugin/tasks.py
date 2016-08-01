@@ -57,10 +57,9 @@ def install(telegraf_config_inputs, telegraf_config_file='',
         raise exceptions.NonRecoverableError(
             "Error! /opt/telegraf file already exists, can't create dir.")
 
-    installation_file = download_telegraf(
-        telegraf_install_path, download_url)
-    install_telegraf(telegraf_install_path, installation_file)
-    configure(telegraf_config_inputs, telegraf_config_file)
+    installation_file = download_telegraf(download_url, telegraf_install_path)
+    install_telegraf(installation_file, telegraf_install_path)
+    configure(telegraf_config_file, telegraf_config_inputs)
 
 
 @operation
@@ -87,7 +86,7 @@ def start(telegraf_config_file='', **kwargs):
         'Have an awesome monitoring experience...')
 
 
-def download_telegraf(telegraf_install_path, download_url='', **kwargs):
+def download_telegraf(download_url='', telegraf_install_path='', **kwargs):
     """Downloading telegraf package form your desire url.
 
     Default url set to be version 0.12.0
@@ -116,7 +115,7 @@ def download_telegraf(telegraf_install_path, download_url='', **kwargs):
     return installation_file
 
 
-def install_telegraf(telegraf_install_path, installation_file, **kwargs):
+def install_telegraf(installation_file, telegraf_install_path, **kwargs):
     """Depacking telegraf package."""
     ctx.logger.info('Installing telegraf...')
 
@@ -134,7 +133,7 @@ def install_telegraf(telegraf_install_path, installation_file, **kwargs):
     ctx.logger.info('Telegraf service was installed...')
 
 
-def configure(telgraf_config, telegraf_config_file='', **kwargs):
+def configure(telegraf_config_file='', telgraf_config='', **kwargs):
     """Generating configuration file from your own desire destination
     or from telegraf_plugin telegraf.conf file.
 
