@@ -78,10 +78,10 @@ class TesttelegrafPlugin(unittest.TestCase):
         dict1_valid = {
             'inputs': {'mem': None,
                        'io': None,
-                       'cpu': {'percpu': 'false',
-                               'totalcpu': 'true',
+                       'cpu': {'percpu': False,
+                               'totalcpu': True,
                                'drop': ['cpu_time', 'x']},
-                       'disk': 10000
+                       'disk': {'int': 1000, 'string': 'abc'}
                        },
             'outputs': {'influxdb':
                         {'urls': ['http://localhost:8086',
@@ -160,13 +160,13 @@ class TesttelegrafPlugin(unittest.TestCase):
                        'cpu': {'percpu': False,
                                'totalcpu': True,
                                'drop': ['cpu_time', 'x']},
-                       'disk': 10000
+                       'disk': {'int': 1000, 'string': 'abc'}
                        },
             'outputs': {'influxdb':
-                        {'urls': ['http://localhost:8086',
-                                  'http://10.0.0.0:8086'],
-                         'database': 'monitoring_telegraf',
-                         'int': 25},
+                            {'urls': ['http://localhost:8086',
+                                      'http://10.0.0.0:8086'],
+                             'database': 'monitoring_telegraf',
+                             'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
                              'topic': 'es'}}
