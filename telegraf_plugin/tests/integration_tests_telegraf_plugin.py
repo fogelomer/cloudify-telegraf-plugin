@@ -85,7 +85,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                                'drop': ['cpu_time']},
                        },
             'outputs': {'influxdb':
-                        {'urls': ['http://localhost:8086',],
+                        {'urls': ['http://localhost:8086'],
                          'database': 'monitoring_telegraf'},
                         }
             }
@@ -157,8 +157,8 @@ class TesttelegrafPlugin(unittest.TestCase):
                                'drop': ['cpu_time']},
                        },
             'outputs': {'influxdb':
-                            {'urls': ['http://localhost:8086',],
-                             'database': 'monitoring_telegraf'},
+                        {'urls': ['http://localhost:8086'],
+                         'database': 'monitoring_telegraf'},
                         }
         }
 

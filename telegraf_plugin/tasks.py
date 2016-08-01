@@ -155,7 +155,7 @@ def configure(telegraf_config_file='', telgraf_config='', **kwargs):
             telegraf_plugin.__name__, 'resources/telegraf.conf')
         configuration = jinja2.Template(telegraf_config_file)
         try:
-            with open(telegraf_config_file, 'w') as f:
+            with open(dest_file, 'w') as f:
                 f.write(configuration.render(telgraf_config))
         except:
             raise ValueError(
