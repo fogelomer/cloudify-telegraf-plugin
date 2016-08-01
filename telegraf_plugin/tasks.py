@@ -16,6 +16,7 @@
 import os
 import sys
 import shlex
+import tempfile
 import subprocess
 import pkg_resources
 
@@ -29,6 +30,10 @@ from cloudify.decorators import operation
 
 import telegraf_plugin
 
+dist = distro.id()
+TELEGRAF_CONFIG_FILE_DEFAULT = os.path.join(
+    '/', 'etc', 'telegraf', 'telegraf.conf')
+TELEGRAF_PATH_DEFAULT = os.path.join('/', 'opt', 'telegraf')
 
 @operation
 def install(telegraf_config_inputs, telegraf_config_file='',
@@ -42,22 +47,18 @@ def install(telegraf_config_inputs, telegraf_config_file='',
     if 'linux' not in sys.platform:
         raise exceptions.NonRecoverableError('''Error!
          Telegraf-plugin is available on linux distribution only''')
-    dist = distro.id()
 
     if not telegraf_install_path:
-        telegraf_install_path = '/opt/telegraf'
+        telegraf_install_path = TELEGRAF_PATH_DEFAULT
     ctx.instance.runtime_properties[
         'telegraf_install_path'] = telegraf_install_path
     if os.path.isfile(telegraf_install_path):
         raise exceptions.NonRecoverableError(
             "Error! /opt/telegraf file already exists, can't create dir.")
 
-    if not os.path.exists(telegraf_install_path):
-        _run('sudo mkdir -p {0}'.format(telegraf_install_path))
-
     installation_file = download_telegraf(
-        telegraf_install_path, dist, download_url)
-    install_telegraf(telegraf_install_path, dist, installation_file)
+        telegraf_install_path, download_url)
+    install_telegraf(telegraf_install_path, installation_file)
     configure(telegraf_config_inputs, telegraf_config_file)
 
 
@@ -71,13 +72,13 @@ def start(telegraf_config_file='', **kwargs):
     """
     ctx.logger.info('Starting telegraf service...')
     if not telegraf_config_file:
-        telegraf_config_file = '/etc/telegraf/telegraf.conf'
+        telegraf_config_file = TELEGRAF_CONFIG_FILE_DEFAULT
     if not os.path.isfile(telegraf_config_file):
         raise exceptions.NonRecoverableError("Config file doesn't exists")
 
-    try:
+    if os.path.exists('/usr/bin/systemctl'):
         _run('sudo systemctl restart telegraf')
-    except SystemExit:
+    else:
         _run('sudo service telegraf restart')
 
     ctx.logger.info(
@@ -85,12 +86,16 @@ def start(telegraf_config_file='', **kwargs):
         'Have an awesome monitoring experience...')
 
 
-def download_telegraf(telegraf_install_path, dist, download_url='', **kwargs):
+def download_telegraf(telegraf_install_path, download_url='', **kwargs):
     """Downloading telegraf package form your desire url.
 
     Default url set to be version 0.12.0
     anf downloaded from official influxdb site.
     """
+
+    if not os.path.exists(telegraf_install_path):
+        _run('sudo mkdir -p {0}'.format(telegraf_install_path))
+
     ctx.logger.info('Downloading telegraf...')
 
     if not download_url:
@@ -100,27 +105,29 @@ def download_telegraf(telegraf_install_path, dist, download_url='', **kwargs):
             download_url = 'http://get.influxdb.org/telegraf/telegraf-0.12.0-1.x86_64.rpm'
         else:
             raise exceptions.NonRecoverableError(
-                'Error! distribution is not supported')
+                '''Error! distribution is not supported.
+                Ubuntu, Debian, Centos and Redhat are supported currently''')
     installation_file = _download_file(download_url, telegraf_install_path)
 
-    ctx.logger.info('Telegraf downloaded...installing..')
+    ctx.logger.info('Telegraf downloaded.')
     return installation_file
 
 
-def install_telegraf(telegraf_install_path, dist, installation_file, **kwargs):
+def install_telegraf(telegraf_install_path, installation_file, **kwargs):
     """Depacking telegraf package."""
     ctx.logger.info('Installing telegraf...')
 
     if dist in ('ubuntu', 'debian'):
-        cmd = 'sudo dpkg -i {0}/{1}'.format(
-            telegraf_install_path, installation_file)
+        install_cmd = 'sudo dpkg -i {0}'.format(
+            os.path.join(telegraf_install_path, installation_file))
     elif dist in ('centos', 'redhat'):
-        cmd = 'sudo yum localinstall -y {0}/{1}'.format(
-            telegraf_install_path, installation_file)
+        install_cmd = 'sudo yum localinstall -y {0}'.format(
+            os.path.join(telegraf_install_path, installation_file))
     else:
         raise exceptions.NonRecoverableError(
-            'Error! distribution is not supported')
-    _run(cmd)
+            '''Error! distribution is not supported.
+            Ubuntu, Debian, Centos and Redhat are supported currently''')
+    _run(install_cmd)
     ctx.logger.info('Telegraf service was installed...')
 
 
@@ -130,19 +137,29 @@ def configure(telgraf_config, telegraf_config_file='', **kwargs):
 
     Rendering your inputs/outputs definitions.
     """
-    ctx.logger.info('Configuring telegraf.conf...')
+    ctx.logger.info('Configuring Telegraf...')
+    dest_file = os.path.join(tempfile.gettempdir(), 'telegraf.conf')
 
-    if not telegraf_config_file:
-        telegraf_config_file_temp = pkg_resources.resource_string(
-            telegraf_plugin.__name__, 'resources/telegraf.conf')
-        configuration = jinja2.Template(telegraf_config_file_temp)
-        telegraf_config_file = '/tmp/telegraf.conf'
-        with open(telegraf_config_file, 'w') as f:
-            f.write(configuration.render(telgraf_config))
+    if telegraf_config_file:
+        try:
+            ctx.download_resource_and_render(telegraf_config_file,
+                                             dest_file,
+                                             telgraf_config)
+        except:
+            raise ValueError(
+                "wrong inputs provided! can't redner configuration file")
     else:
-        ctx.download_resource_and_render(telegraf_config_file,
-                                         template_variables=telgraf_config)
-    _run('sudo mv {0} /etc/telegraf/telegraf.conf'.format(telegraf_config_file))
+        telegraf_config_file = pkg_resources.resource_string(
+            telegraf_plugin.__name__, 'resources/telegraf.conf')
+        configuration = jinja2.Template(telegraf_config_file)
+        try:
+            with open(telegraf_config_file, 'w') as f:
+                f.write(configuration.render(telgraf_config))
+        except:
+            raise ValueError(
+                "wrong inputs provided! can't redner configuration file")
+
+    _run('sudo mv {0} {1}'.format(telegraf_config_file, TELEGRAF_CONFIG_FILE_DEFAULT))
     ctx.logger.info('telegraf.conf was configured...')
 
 
