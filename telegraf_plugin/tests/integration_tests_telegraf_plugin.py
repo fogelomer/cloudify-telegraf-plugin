@@ -90,8 +90,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                          'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                             'topic': 'es'},
-                        'int': 10}
+                             'topic': 'es'}}
         }
 
         tasks.configure('', dict1_valid)
@@ -170,8 +169,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                          'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                             'topic': 'es'},
-                        'int': 10}
+                             'topic': 'es'}}
         }
 
         tasks.configure(os.path.join('telegraf_plugin',
