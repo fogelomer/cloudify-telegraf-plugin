@@ -89,7 +89,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                          'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                             'topic': 'es'}
+                             'topic': 'es'},
                         'int': 10},
         }
 
@@ -168,7 +168,7 @@ class TesttelegrafPlugin(unittest.TestCase):
                              'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                             'topic': 'es'}
+                             'topic': 'es'},
                         'int': 10},
         }
 
