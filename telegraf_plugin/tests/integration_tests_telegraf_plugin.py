@@ -20,7 +20,6 @@ import unittest
 import tempfile
 import subprocess
 
-import yaml
 import distro
 from mock import patch
 
@@ -90,8 +89,9 @@ class TesttelegrafPlugin(unittest.TestCase):
                          'int': 25},
                         'kafka':
                             {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                             'topic': 'es'}}
-        }
+                             'topic': 'es'}
+                        }
+            }
 
         tasks.configure('', dict1_valid)
         self.assertTrue(os.path.exists(CONFIG_FILE))
@@ -158,13 +158,13 @@ class TesttelegrafPlugin(unittest.TestCase):
                        'disk': {'int': 1000, 'string': 'abc'}
                        },
             'outputs': {'influxdb':
-                            {'urls': ['http://localhost:8086',
-                                      'http://10.0.0.0:8086'],
-                             'database': 'monitoring_telegraf',
-                             'int': 25},
+                        {'urls': ['http://localhost:8086',
+                                  'http://10.0.0.0:8086'],
+                         'database': 'monitoring_telegraf',
+                         'int': 25},
                         'kafka':
-                            {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
-                             'topic': 'es'}}
+                        {'brokers': ['10.0.0.0:9092', '10.0.0.1:9092'],
+                         'topic': 'es'}}
         }
 
         tasks.configure(os.path.join('telegraf_plugin',

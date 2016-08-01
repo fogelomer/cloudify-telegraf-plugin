@@ -161,8 +161,7 @@ def configure(telegraf_config_file='', telgraf_config='', **kwargs):
             raise ValueError(
                 "wrong inputs provided! can't redner configuration file")
 
-    _run('sudo mv {0} {1}'.format(telegraf_config_file,
-                                  TELEGRAF_CONFIG_FILE_DEFAULT))
+    _run('sudo mv {0} {1}'.format(dest_file, TELEGRAF_CONFIG_FILE_DEFAULT))
     ctx.logger.info('telegraf.conf was configured...')
 
 
